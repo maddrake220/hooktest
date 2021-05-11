@@ -1,24 +1,7 @@
 
 import React, { useState, useReducer } from "react";
-import {v4 as uuid} from "uuid"
-const initialState = {
-  toDos : []
-}
+import reducer, { initialState, ADD, DEL, COMP, UNCOMPLETE} from "./reducer";
 
-const ADD = "add";
-const DEL = "del";
-const reducer = (state, action) => {
-  switch (action.type) {
-    case ADD:
-      return { toDos: [...state.toDos, { text: action.payload, id: uuid() }] }; // uuid : 각 toDo에 id 부여
-    case DEL:
-      return { toDos: state.toDos.filter(toDo=>
-                  { return toDo.id !== action.tagetid })}
-    /* toDos  */
-    default:
-      return;
-  }
-};
 /* */
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -48,9 +31,20 @@ function App() {
         <ul>
         <h2>To Dos</h2>
         {state.toDos.map((toDo) => (
-          <li key={toDo.id}>:
+          <li key={toDo.id}>
             <span>{toDo.text}</span>
             <button onClick={()=>dispatch({type: DEL, tagetid: toDo.id})}>DELETE</button>
+            <span>{toDo.text}</span>
+            <button onClick={()=>dispatch({type: COMP, tagetid: toDo.id})}>COMPLETE</button>
+          </li>
+        ))}
+      </ul>
+      <ul>
+        <h2>Completes</h2>
+        {state.completed.map((complete) => (
+          <li key={complete.id}>
+            <span>{complete.text}</span>
+            <button onClick={()=>dispatch({type: UNCOMPLETE, tagetid: complete.id})}>UNCOMPLETE</button>
           </li>
         ))}
       </ul>
